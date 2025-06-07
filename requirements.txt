@@ -1,0 +1,5 @@
+tkinter
+customtkinter
+subprocess
+threading
+os
