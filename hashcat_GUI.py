@@ -5,6 +5,9 @@ import subprocess
 import threading
 import os
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(levelname)s')
 
 # Set the appearance mode and default color theme
 ctk.set_appearance_mode("System")  # Modes: "System" (default), "Dark", "Light"
@@ -24,6 +27,8 @@ class HashcatGUI(ctk.CTk):
         self.wordlist_file_path = tk.StringVar()
         self.output_file = tk.StringVar(value="cracked_passwords.txt") # Default output file name
         self.hash_mode = tk.StringVar(value="0") # Default to MD5
+
+
 
         # --- Main Layout ---
         self.grid_columnconfigure(0, weight=1)
@@ -55,6 +60,8 @@ class HashcatGUI(ctk.CTk):
         self.options_frame.grid_columnconfigure(1, weight=1)
         self.options_frame.grid_columnconfigure(3, weight=1)
 
+
+
         # Hash Mode
         ctk.CTkLabel(self.options_frame, text="Hash Mode (-m):").grid(row=0, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkEntry(self.options_frame, textvariable=self.hash_mode, width=80).grid(row=0, column=1, padx=0, pady=5, sticky="w")
@@ -63,10 +70,13 @@ class HashcatGUI(ctk.CTk):
         ctk.CTkLabel(self.options_frame, text="Output File (-o):").grid(row=0, column=2, padx=(20, 10), pady=5, sticky="w")
         ctk.CTkEntry(self.options_frame, textvariable=self.output_file).grid(row=0, column=3, padx=0, pady=5, sticky="ew")
 
+
         # --- Control Frame ---
         self.control_frame = ctk.CTkFrame(self)
         self.control_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="ew")
         self.control_frame.grid_columnconfigure((0, 1), weight=1)
+        self.clear_button = ctk.CTkButton(self.control_frame,text="Clear Output",command=self.clear_output)
+        self.clear_button.grid(row=0,column=2,padx=10,pady=10, sticky="ew")
 
         self.start_button = ctk.CTkButton(self.control_frame, text="Start Attack", command=self.start_hashcat_thread)
         self.start_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
@@ -77,6 +87,12 @@ class HashcatGUI(ctk.CTk):
         # --- Output Text Box ---
         self.output_text = ctk.CTkTextbox(self, state="disabled", wrap="word")
         self.output_text.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
+
+
+    def clear_output(self):
+        self.output_text.configure(state="normal")
+        self.output_text.delete("1.0",tk.END)
+        self.output_text.configure(state="disabled")
 
     def select_hashcat_dir(self):
         # Use askdirectory to select a folder
@@ -166,7 +182,7 @@ class HashcatGUI(ctk.CTk):
                 wordlist
             ]
 
-            # Run the command from within hashcat's directory using 'cwd'
+            # Run the command from within hashcat directory using 'cwd'
             # This is crucial for hashcat to find its files (e.g., OpenCL kernels)
             self.process = subprocess.Popen(
                 cmd,
@@ -232,5 +248,10 @@ class HashcatGUI(ctk.CTk):
 
 
 if __name__ == "__main__":
-    app = HashcatGUI()
-    app.mainloop()
+    try:
+        app = HashcatGUI()
+        app.mainloop()
+    except Exception as e:
+        logging.error("An error has occured while running the app",exc_info=True)
+else:
+    logging.info("HashcatGUI app did not start because this script was imported, not run directly.")
