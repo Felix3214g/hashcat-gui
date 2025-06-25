@@ -120,14 +120,18 @@ class HashcatGUI(ctk.CTk):
     def start_hashcat_thread(self):
         """ Validates inputs and starts the hashcat process in a separate thread. """
         # --- Input Validation ---
-        if not self.hashcat_dir.get():
-            self.log("ERROR: Please select the Hashcat folder.\n")
+        hashcat_dir = self.hashcat_dir.get()
+        hash_file = self.hash_file_path.get()
+        wordlist = self.wordlist_file_path.get()
+
+        if not hashcat_dir or not os.path.isdir(hashcat_dir):
+            self.log("ERROR: Please select a valid Hashcat directory.\n")
             return
-        if not self.hash_file_path.get():
-            self.log("ERROR: Please select a hash file.\n")
+        if not hash_file or not os.path.isfile(hash_file):
+            self.log("ERROR: Please select a valid hash file.\n")
             return
-        if not self.wordlist_file_path.get():
-            self.log("ERROR: Please select a wordlist file.\n")
+        if not wordlist or not os.path.isfile(wordlist):
+            self.log("ERROR: Please select a valid wordlist file.\n")
             return
 
         self.start_button.configure(state="disabled")
@@ -200,10 +204,17 @@ class HashcatGUI(ctk.CTk):
                 self.log(line)
 
             self.process.stdout.close()
-            self.process.wait()
+            return_code = self.process.wait()
+            if return_code != 0:
+                self.log(f"\n--- Hashcat process exited with error code: {return_code} ---\n")
 
+
+        except FileNotFoundError:
+            self.log(f"ERROR: Could not find the hashcat executable at '{executable_path}'.\n"
+                     f"Please ensure the path is correct and the file has execute permissions.\n")
         except Exception as e:
-            self.log(f"An unexpected error occurred: {e}\n")
+            self.log(f"An unexpected error occurred while trying to run hashcat: {e}\n")
+
 
         self.log("\n--- Hashcat process finished ---\n")
         self.show_cracked_passwords()

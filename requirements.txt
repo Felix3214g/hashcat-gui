@@ -1,5 +1,2 @@
-tkinter
 customtkinter
-subprocess
-threading
-os
+pyinstaller
