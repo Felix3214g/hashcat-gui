@@ -1,5 +1,5 @@
 Hashcat GUI
-![image](https://github.com/user-attachments/assets/00047a06-b102-4b90-b7af-bee12925277a)
+
 
 A graphical interface for Hashcat that removes the complexity of command-line password recovery operations.
 Overview
