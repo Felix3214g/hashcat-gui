@@ -1,6 +1,5 @@
 Hashcat GUI
 
-
 A graphical interface for Hashcat that removes the complexity of command-line password recovery operations.
 Overview
 This application provides a streamlined approach to using Hashcat through an intuitive GUI. Built for security professionals who need efficient hash cracking without memorizing syntax.
