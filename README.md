@@ -1,6 +1,6 @@
 # Hashcat GUI
 
-## V1.2
+## V1.1
 
 ![Hashcat GUI Interface](https://github.com/user-attachments/assets/00047a06-b102-4b90-b7af-bee12925277a)
 
