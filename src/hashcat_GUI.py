@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import filedialog
+from idlelib.configdialog import changes
+from tkinter import filedialog, OptionMenu
 import customtkinter as ctk
 import subprocess
 import threading
@@ -7,14 +8,17 @@ import os
 import sys
 import logging
 
+from customtkinter import CTkEntry
+from customtkinter.windows.widgets.core_widget_classes import dropdown_menu
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s')
 
 # Set the appearance mode and default color theme
-ctk.set_appearance_mode("System")  #
-ctk.set_default_color_theme("blue")  #
-
+ctk.set_appearance_mode("System")
+ctk.set_default_color_theme("blue")
 
 class HashcatGUI(ctk.CTk):
+
     def __init__(self):
         super().__init__()
 
@@ -39,7 +43,7 @@ class HashcatGUI(ctk.CTk):
         self.input_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         self.input_frame.grid_columnconfigure(1, weight=1)
 
-        # --- NEW: Hashcat Directory ---
+        # select the hash cat directory
         ctk.CTkLabel(self.input_frame, text="Hashcat Folder:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkEntry(self.input_frame, textvariable=self.hashcat_dir, width=400).grid(row=0, column=1, padx=10, pady=5,
                                                                                       sticky="ew")
@@ -66,9 +70,44 @@ class HashcatGUI(ctk.CTk):
         self.options_frame.grid_columnconfigure(1, weight=1)
         self.options_frame.grid_columnconfigure(3, weight=1)
 
+
+        self.hash_presets = {
+            "MD5": "0",
+            "SHA1": "100",
+            "SHA256": "1400",
+            "SHA512": "1700",
+            "NTLM": "1000"
+
+        }
+        self.reverse_hash_presets = {
+            "0": "MD5",
+            "100": "SHA1",
+            "1400": "SHA256",
+            "1700": "SHA512",
+            "1000": "NTLM"
+        }
+
+        self.dropdown = ctk.CTkOptionMenu(
+            self.options_frame,
+            values=list(self.hash_presets.keys()),
+            command = self.change_choice
+        )
+
+
+
+
+
+
+
+
+        self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+        self.get_mode()
+        self.hash_mode.trace_add("write", self.get_mode)
+
         # Hash Mode
-        ctk.CTkLabel(self.options_frame, text="Hash Mode (-m):").grid(row=0, column=0, padx=10, pady=5, sticky="w")
-        ctk.CTkEntry(self.options_frame, textvariable=self.hash_mode, width=80).grid(row=0, column=1, padx=0, pady=5,
+        ctk.CTkLabel(self.options_frame, text="Hash Mode (-m):").grid(row=0, column=1, padx=10, pady=5, sticky="w")
+        CTkEntry(self.options_frame, textvariable=self.hash_mode, width=80).grid(row=0, column=1, padx=0, pady=5,
                                                                                      sticky="w")
 
         # Output filename
@@ -95,10 +134,33 @@ class HashcatGUI(ctk.CTk):
         self.output_text = ctk.CTkTextbox(self, state="disabled", wrap="word")
         self.output_text.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
 
+
+    def change_choice(self,mode):
+        mode = self.dropdown.get()
+        choice = self.hash_presets[mode]
+        self.hash_mode.set(choice)
+
+
+    def get_mode(self, *args):
+        current_mode = self.hash_mode.get()
+        if current_mode == "0":
+            self.dropdown.set(self.reverse_hash_presets["0"])
+        elif current_mode == "100":
+             self.dropdown.set(self.reverse_hash_presets["100"])
+
+        elif current_mode == "1400":
+             self.dropdown.set(self.reverse_hash_presets["1400"])
+
+        elif current_mode == "1700":
+             self.dropdown.set(self.reverse_hash_presets["1700"])
+
+
+
     def clear_output(self):
         self.output_text.configure(state="normal")
         self.output_text.delete("1.0", tk.END)
         self.output_text.configure(state="disabled")
+
 
     def select_hashcat_dir(self):
         # Use askdirectory to select a folder
@@ -124,8 +186,8 @@ class HashcatGUI(ctk.CTk):
         self.output_text.configure(state="disabled")
 
     def start_hashcat_thread(self):
-        """ Validates inputs and starts the hashcat process in a separate thread. """
-        # --- Input Validation ---
+
+        # Validates inputs
         hashcat_dir = self.hashcat_dir.get()
         hash_file = self.hash_file_path.get()
         wordlist = self.wordlist_file_path.get()
@@ -162,6 +224,7 @@ class HashcatGUI(ctk.CTk):
         mode = self.hash_mode.get()
         output_filename = self.output_file.get()
 
+
         # Chooses the correct executable name for the right operating system
         if sys.platform == "win32":
             executable_name = "hashcat.exe"
@@ -171,7 +234,7 @@ class HashcatGUI(ctk.CTk):
         executable_path = os.path.join(hashcat_dir, executable_name)
 
         if not os.path.exists(executable_path):
-            # Fallback for systems where it might just be 'hashcat' (e.g., from a package manager)
+            # Fallback for systems where it might just be hashcat
             if sys.platform != "win32" and os.path.exists(os.path.join(hashcat_dir, "hashcat")):
                 executable_path = os.path.join(hashcat_dir, "hashcat")
             else:
@@ -188,6 +251,9 @@ class HashcatGUI(ctk.CTk):
         self.log(f"Mode: {mode}, Hash File: {hash_file}, Wordlist: {wordlist}\n")
         self.log(f"Results will be saved to: {os.path.join(hashcat_dir, output_filename)}\n\n")
 
+
+
+
         try:
             cmd = [
                 executable_path,  # Use the full path to the executable
@@ -198,6 +264,8 @@ class HashcatGUI(ctk.CTk):
                 hash_file,
                 wordlist
             ]
+
+
 
             # Run the command from within hashcat directory using cwd
             self.process = subprocess.Popen(
