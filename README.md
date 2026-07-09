@@ -2,11 +2,12 @@
 
 ## V1.1
 
-![Hashcat GUI Interface](https://github.com/user-attachments/assets/00047a06-b102-4b90-b7af-bee12925277a)
+<img src="https://github.com/user-attachments/assets/00047a06-b102-4b90-b7af-bee12925277a" width="800" alt="Hashcat GUI V1.1">
+
 
 ## What's New in V1.2
 
-<img width="787" height="673" alt="image" src="https://github.com/user-attachments/assets/a397b30e-a976-4d58-be6f-126ac41045b4" />
+<img src="https://github.com/user-attachments/assets/a397b30e-a976-4d58-be6f-126ac41045b4" width="800" alt="Hashcat GUI V1.2">
 
 - Added hash mode dropdown with common presets
 - Added automatic synchronization between dropdown and manual mode input
