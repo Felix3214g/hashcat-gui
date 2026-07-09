@@ -132,15 +132,15 @@ class HashcatGUI(ctk.CTk):
 
         if not hashcat_dir or not os.path.isdir(hashcat_dir):
             self.log("ERROR: Please select a valid Hashcat directory.\n")
-            self.status_label.configure(text="Status: Error")
+            self.status_label.configure(text="Status: Error",text_color="red")
             return
         if not hash_file or not os.path.isfile(hash_file):
             self.log("ERROR: Please select a valid hash file.\n")
-            self.status_label.configure(text="Status: Error")
+            self.status_label.configure(text="Status: Error",text_color="red")
             return
         if not wordlist or not os.path.isfile(wordlist):
             self.log("ERROR: Please select a valid wordlist file.\n")
-            self.status_label.configure(text="Status: Error")
+            self.status_label.configure(text="Status: Error",text_color="red")
             return
 
         self.start_button.configure(state="disabled")
@@ -177,13 +177,13 @@ class HashcatGUI(ctk.CTk):
             else:
 
                 self.log(f"Error: Hashcat executable ('{executable_name}') not found in '{hashcat_dir}'.\n")
-                self.status_label.configure(text="Status: Error")
+                self.status_label.configure(text="Status: Error",text_color="red")
                 self.process_finished()
 
                 return
 
         self.log(f"--- Starting Hashcat ---\n")
-        self.status_label.configure(text="Status: Running")
+        self.status_label.configure(text="Status: Running",text_color="orange")
         self.log(f"Executable: {executable_path}\n")
         self.log(f"Mode: {mode}, Hash File: {hash_file}, Wordlist: {wordlist}\n")
         self.log(f"Results will be saved to: {os.path.join(hashcat_dir, output_filename)}\n\n")
@@ -219,7 +219,7 @@ class HashcatGUI(ctk.CTk):
             return_code = self.process.wait()
             if return_code != 0:
                 self.log(f"\n--- Hashcat process exited with error code: {return_code} ---\n")
-                self.status_label.configure(text="Status: Error")
+                self.status_label.configure(text="Status: Error",text_color="red")
                 self.process_finished()
                 return
 
@@ -228,15 +228,18 @@ class HashcatGUI(ctk.CTk):
             self.log(f"ERROR: Could not find the hashcat executable at '{executable_path}'.\n"
 
                      f"Please ensure the path is correct and the file has execute permissions.\n")
-            self.status_label.configure(text="Status: Error")
+            self.status_label.configure(text="Status: Error",text_color="red")
+            self.process_finished() 
 
 
         except Exception as e:
             self.log(f"An unexpected error occurred while trying to run hashcat: {e}\n")
-            self.status_label.configure(text="Status: Error")
+            self.status_label.configure(text="Status: Error",text_color="red")
+            self.process_finished()
+            return
 
         self.log("\n--- Hashcat process finished ---\n")
-        self.status_label.configure(text="Status: Finished")
+        self.status_label.configure(text="Status: Finished",text_color="green")
         self.show_cracked_passwords()
         self.process_finished()
 
@@ -246,13 +249,13 @@ class HashcatGUI(ctk.CTk):
             self.process.terminate()  # A more forceful way to stop
 
             try:
-                # Give it a moment to terminate gracefully
+                # Terminates the process gracefully
                 self.process.wait(timeout=2)
             except subprocess.TimeoutExpired:
                 self.log("--- Process did not terminate, killing it. ---\n")
-                self.process.kill()  # The last resort
+                self.process.kill()  # last resort
             self.log("--- Hashcat process stopped by user ---\n")
-            self.status_label.configure(text="Status: Stopped")
+            self.status_label.configure(text="Status: Stopped",text_color= None)
         self.process_finished()
 
     def process_finished(self):
@@ -283,7 +286,7 @@ if __name__ == "__main__":
     try:
         app = HashcatGUI()
         app.mainloop()
-    except Exception:
+    except Exception as e:
         logging.error("An error has occured while running the app", exc_info=True)
 else:
     logging.info("HashcatGUI app did not start because this script was imported, not run directly.")
