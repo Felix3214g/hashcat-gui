@@ -155,14 +155,14 @@ class HashcatGUI(ctk.CTk):
         self.hashcat_thread.start()
 
     def run_hashcat(self):
-        #creates the hashcat command
+        # creates the hashcat command
         hashcat_dir = self.hashcat_dir.get()
         hash_file = self.hash_file_path.get()
         wordlist = self.wordlist_file_path.get()
         mode = self.hash_mode.get()
         output_filename = self.output_file.get()
 
-        # Determine the correct executable name based on OS
+        # Chooses the correct executable name for the right operating system
         if sys.platform == "win32":
             executable_name = "hashcat.exe"
         else:  # Linux, macOS, etc
@@ -229,7 +229,7 @@ class HashcatGUI(ctk.CTk):
 
                      f"Please ensure the path is correct and the file has execute permissions.\n")
             self.status_label.configure(text="Status: Error",text_color="red")
-            self.process_finished() 
+            self.process_finished()
 
 
         except Exception as e:
