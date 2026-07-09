@@ -94,12 +94,6 @@ class HashcatGUI(ctk.CTk):
         )
 
 
-
-
-
-
-
-
         self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
         self.get_mode()
@@ -179,7 +173,7 @@ class HashcatGUI(ctk.CTk):
             self.wordlist_file_path.set(path)
 
     def log(self, message):
-        """ Safely appends a message to the output textbox from any thread. """
+
         self.output_text.configure(state="normal")
         self.output_text.insert(tk.END, message)
         self.output_text.see(tk.END)
@@ -250,8 +244,6 @@ class HashcatGUI(ctk.CTk):
         self.log(f"Executable: {executable_path}\n")
         self.log(f"Mode: {mode}, Hash File: {hash_file}, Wordlist: {wordlist}\n")
         self.log(f"Results will be saved to: {os.path.join(hashcat_dir, output_filename)}\n\n")
-
-
 
 
         try:
@@ -332,7 +324,7 @@ class HashcatGUI(ctk.CTk):
         self.process = None
 
     def show_cracked_passwords(self):
-        """ Reads and displays the contents of the output file. """
+
         output_path = os.path.join(self.hashcat_dir.get(), self.output_file.get())
 
         self.log(f"\n--- Checking for results in {output_path} ---\n")
