@@ -22,7 +22,7 @@ class HashcatGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Universal Hashcat GUI")
+        self.title("Hashcat GUI")
         self.geometry("800x650")  # Increased height for new fields
 
         self.process = None
