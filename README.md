@@ -20,7 +20,7 @@ This application provides a streamlined approach to using Hashcat through an int
 
 Clone the repository:
 ```bash
-git clone https://github.com/yourusername/hashcat-gui.git
+git clone https://github.com/Felix3214g/hashcat-gui.git
 cd hashcat-gui
 ```
 
