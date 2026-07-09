@@ -223,7 +223,7 @@ class HashcatGUI(ctk.CTk):
                 self.process_finished()
                 return
 
-
+        # Error handling for a file not found error
         except FileNotFoundError:
             self.log(f"ERROR: Could not find the hashcat executable at '{executable_path}'.\n"
 
@@ -287,6 +287,6 @@ if __name__ == "__main__":
         app = HashcatGUI()
         app.mainloop()
     except Exception as e:
-        logging.error("An error has occured while running the app", exc_info=True)
+        logging.error("An error has occurred while running the app", exc_info=True)
 else:
     logging.info("HashcatGUI app did not start because this script was imported, not run directly.")
