@@ -163,6 +163,8 @@ class HashcatGUI(ctk.CTk):
 
         elif current_mode == "1700":
              self.dropdown.set(self.reverse_hash_presets["1700"])
+        elif current_mode == "1000":
+            self.dropdown.set(self.reverse_hash_presets["1000"])
 
 
 
@@ -272,7 +274,7 @@ class HashcatGUI(ctk.CTk):
                 hash_file,
                 wordlist
             ]
-            
+
             if self.toggle_force.get():
                 cmd.append("--force")
 
