@@ -70,7 +70,7 @@ class HashcatGUI(ctk.CTk):
         self.options_frame.grid_columnconfigure(1, weight=1)
         self.options_frame.grid_columnconfigure(3, weight=1)
 
-
+        #Hash presets
         self.hash_presets = {
             "MD5": "0",
             "SHA1": "100",
@@ -92,6 +92,16 @@ class HashcatGUI(ctk.CTk):
             values=list(self.hash_presets.keys()),
             command = self.change_choice
         )
+
+        self.toggle_force = ctk.CTkSwitch(
+            self.options_frame,
+            text="Force (--force)",
+            onvalue= True,
+            offvalue = False,
+        )
+        self.toggle_force.grid(row= 1, column=0, padx=10, pady=5, sticky="w")
+
+
 
 
         self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
@@ -127,6 +137,12 @@ class HashcatGUI(ctk.CTk):
         # Output box
         self.output_text = ctk.CTkTextbox(self, state="disabled", wrap="word")
         self.output_text.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
+        change_mode = False
+
+
+
+
+
 
 
     def change_choice(self,mode):
@@ -251,11 +267,15 @@ class HashcatGUI(ctk.CTk):
                 executable_path,  # Use the full path to the executable
                 '-m', mode,
                 '-a', '0',  # Standard dictionary attack
-                '--force',
+
                 '-o', output_filename,
                 hash_file,
                 wordlist
             ]
+            
+            if self.toggle_force.get():
+                cmd.append("--force")
+
 
 
 
