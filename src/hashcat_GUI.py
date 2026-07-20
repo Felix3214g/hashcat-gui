@@ -70,7 +70,7 @@ class HashcatGUI(ctk.CTk):
         self.options_frame.grid_columnconfigure(1, weight=1)
         self.options_frame.grid_columnconfigure(3, weight=1)
 
-        #Hash presets
+        # Hash presets
         self.hash_presets = {
             "MD5": "0",
             "SHA1": "100",
@@ -150,7 +150,7 @@ class HashcatGUI(ctk.CTk):
         choice = self.hash_presets[mode]
         self.hash_mode.set(choice)
 
-
+    # set modes
     def get_mode(self, *args):
         current_mode = self.hash_mode.get()
         if current_mode == "0":
