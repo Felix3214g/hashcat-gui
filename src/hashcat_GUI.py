@@ -7,7 +7,6 @@ import threading
 import os
 import sys
 import logging
-
 from customtkinter import CTkEntry
 
 
