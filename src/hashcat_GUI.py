@@ -9,7 +9,7 @@ import sys
 import logging
 
 from customtkinter import CTkEntry
-from customtkinter.windows.widgets.core_widget_classes import dropdown_menu
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s')
 
@@ -79,6 +79,8 @@ class HashcatGUI(ctk.CTk):
             "NTLM": "1000"
 
         }
+
+        #reverse hash presets
         self.reverse_hash_presets = {
             "0": "MD5",
             "100": "SHA1",
@@ -99,11 +101,14 @@ class HashcatGUI(ctk.CTk):
             onvalue= True,
             offvalue = False,
         )
+        self.toggle_optimized_kernel = ctk.CTkSwitch(
+            self.options_frame,
+            text="Optimized kernel (-O)",
+            onvalue= True,
+            offvalue = False,
+        )
+        self.toggle_optimized_kernel.grid(row=1,column=1, pady=5,padx=10,  sticky="ew")
         self.toggle_force.grid(row= 1, column=0, padx=10, pady=5, sticky="w")
-
-
-
-
         self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
         self.get_mode()
@@ -137,11 +142,6 @@ class HashcatGUI(ctk.CTk):
         # Output box
         self.output_text = ctk.CTkTextbox(self, state="disabled", wrap="word")
         self.output_text.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
-        change_mode = False
-
-
-
-
 
 
 
@@ -269,17 +269,16 @@ class HashcatGUI(ctk.CTk):
                 executable_path,  # Use the full path to the executable
                 '-m', mode,
                 '-a', '0',  # Standard dictionary attack
-
                 '-o', output_filename,
                 hash_file,
                 wordlist
             ]
 
+
             if self.toggle_force.get():
                 cmd.append("--force")
-
-
-
+            if self.toggle_optimized_kernel.get():
+                cmd.append("-O")
 
             # Run the command from within hashcat directory using cwd
             self.process = subprocess.Popen(
@@ -295,7 +294,10 @@ class HashcatGUI(ctk.CTk):
 
             # Read output line by line in real-time
             for line in iter(self.process.stdout.readline, ''):
+
                 self.log(line)
+
+
 
             self.process.stdout.close()
             return_code = self.process.wait()
