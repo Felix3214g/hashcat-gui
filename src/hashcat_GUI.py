@@ -76,7 +76,6 @@ class HashcatGUI(ctk.CTk):
             "SHA256": "1400",
             "SHA512": "1700",
             "NTLM": "1000"
-
         }
 
         #reverse hash presets
@@ -87,25 +86,29 @@ class HashcatGUI(ctk.CTk):
             "1700": "SHA512",
             "1000": "NTLM"
         }
-
+        # dropdown menu
         self.dropdown = ctk.CTkOptionMenu(
             self.options_frame,
             values=list(self.hash_presets.keys()),
             command = self.change_choice
         )
 
+        # toggle --force
         self.toggle_force = ctk.CTkSwitch(
             self.options_frame,
             text="Force (--force)",
             onvalue= True,
             offvalue = False,
         )
+        # Turns on optimized kernel
         self.toggle_optimized_kernel = ctk.CTkSwitch(
             self.options_frame,
             text="Optimized kernel (-O)",
             onvalue= True,
             offvalue = False,
         )
+
+
         self.toggle_optimized_kernel.grid(row=1,column=1, pady=5,padx=10,  sticky="ew")
         self.toggle_force.grid(row= 1, column=0, padx=10, pady=5, sticky="w")
         self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
@@ -148,6 +151,13 @@ class HashcatGUI(ctk.CTk):
         mode = self.dropdown.get()
         choice = self.hash_presets[mode]
         self.hash_mode.set(choice)
+
+
+
+
+
+
+
 
     # set modes
     def get_mode(self, *args):
@@ -272,6 +282,9 @@ class HashcatGUI(ctk.CTk):
                 hash_file,
                 wordlist
             ]
+            selected_device = self.choose_device.get()
+            raw_device = self.device_type[selected_device]
+            cmd.extend(raw_device.split())
 
 
             if self.toggle_force.get():
