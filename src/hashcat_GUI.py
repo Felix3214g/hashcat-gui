@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s')
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
+
 class HashcatGUI(ctk.CTk):
 
     def __init__(self):
@@ -43,25 +44,28 @@ class HashcatGUI(ctk.CTk):
         self.input_frame.grid_columnconfigure(1, weight=1)
 
         # select the hash cat directory
-        ctk.CTkLabel(self.input_frame, text="Hashcat Folder:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+        self.hashcat_label = ctk.CTkLabel(self.input_frame, text="Hashcat Folder:")
+        self.hashcat_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkEntry(self.input_frame, textvariable=self.hashcat_dir, width=400).grid(row=0, column=1, padx=10, pady=5,
                                                                                       sticky="ew")
-        ctk.CTkButton(self.input_frame, text="Browse...", command=self.select_hashcat_dir).grid(row=0, column=2,
-                                                                                                padx=10, pady=5)
+        self.hashcat_browse_button = ctk.CTkButton(self.input_frame, text="Browse...", command=self.select_hashcat_dir)
+        self.hashcat_browse_button.grid(row=0, column=2, padx=10, pady=5)
 
         # Hash File
         ctk.CTkLabel(self.input_frame, text="Hash File:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkEntry(self.input_frame, textvariable=self.hash_file_path, width=400).grid(row=1, column=1, padx=10,
                                                                                          pady=5, sticky="ew")
-        ctk.CTkButton(self.input_frame, text="Browse...", command=self.select_hash_file).grid(row=1, column=2, padx=10,
-                                                                                              pady=5)
+        self.hash_browse_button = ctk.CTkButton(self.input_frame, text="Browse...", command=self.select_hash_file)
+        self.hash_browse_button.grid(row=1, column=2, padx=10, pady=5)
 
         # Wordlist File
         ctk.CTkLabel(self.input_frame, text="Wordlist:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
         ctk.CTkEntry(self.input_frame, textvariable=self.wordlist_file_path, width=400).grid(row=2, column=1, padx=10,
                                                                                              pady=5, sticky="ew")
-        ctk.CTkButton(self.input_frame, text="Browse...", command=self.select_wordlist_file).grid(row=2, column=2,
-                                                                                                  padx=10, pady=5)
+        self.wordlist_browse_button = ctk.CTkButton(self.input_frame, text="Browse...",
+                                                    command=self.select_wordlist_file)
+        self.wordlist_browse_button.grid(row=2, column=2, padx=10, pady=5)
 
         # Options Frame (for Hash Mode and Output File)
         self.options_frame = ctk.CTkFrame(self.input_frame)
@@ -78,7 +82,7 @@ class HashcatGUI(ctk.CTk):
             "NTLM": "1000"
         }
 
-        #reverse hash presets
+        # reverse hash presets
         self.reverse_hash_presets = {
             "0": "MD5",
             "100": "SHA1",
@@ -86,116 +90,191 @@ class HashcatGUI(ctk.CTk):
             "1700": "SHA512",
             "1000": "NTLM"
         }
+
         # dropdown menu
         self.dropdown = ctk.CTkOptionMenu(
             self.options_frame,
             values=list(self.hash_presets.keys()),
-            command = self.change_choice
+            command=self.change_choice
         )
+
+        self.color = {
+            "Blue": "#1F6AA5",
+            "Purple": "#7C3AED",
+            "Red": "#DC2626",
+            "Green": "#16A34A",
+            "Orange": "#EA580C"
+        }
+
+        # color change dropdown
+        self.color_dropdown = ctk.CTkOptionMenu(
+            self.options_frame,
+            values=list(self.color.keys()),
+            command=self.change_color
+        )
+
+        self.color_dropdown.grid(row=1, column=2, padx=10, pady=5, sticky="w")
 
         # toggle --force
         self.toggle_force = ctk.CTkSwitch(
             self.options_frame,
             text="Force (--force)",
-            onvalue= True,
-            offvalue = False,
+            onvalue=True,
+            offvalue=False,
         )
+
         # Turns on optimized kernel
         self.toggle_optimized_kernel = ctk.CTkSwitch(
             self.options_frame,
             text="Optimized kernel (-O)",
-            onvalue= True,
-            offvalue = False,
+            onvalue=True,
+            offvalue=False,
         )
 
-
-        self.toggle_optimized_kernel.grid(row=1,column=1, pady=5,padx=10,  sticky="ew")
-        self.toggle_force.grid(row= 1, column=0, padx=10, pady=5, sticky="w")
+        self.toggle_optimized_kernel.grid(row=1, column=1, pady=5, padx=10, sticky="ew")
+        self.toggle_force.grid(row=1, column=0, padx=10, pady=5, sticky="w")
         self.dropdown.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
         self.get_mode()
         self.hash_mode.trace_add("write", self.get_mode)
 
         # Hash Mode
-        ctk.CTkLabel(self.options_frame, text="Hash Mode (-m):").grid(row=0, column=1, padx=10, pady=5, sticky="w")
-        CTkEntry(self.options_frame, textvariable=self.hash_mode, width=80).grid(row=0, column=1, padx=0, pady=5,
-                                                                                     sticky="w")
+        ctk.CTkLabel(
+            self.options_frame,
+            text="Hash Mode (-m):"
+        ).grid(
+            row=0,
+            column=1,
+            padx=10,
+            pady=5,
+            sticky="w"
+        )
+
+        CTkEntry(
+            self.options_frame,
+            textvariable=self.hash_mode,
+            width=80
+        ).grid(
+            row=0,
+            column=1,
+            padx=0,
+            pady=5,
+            sticky="w"
+        )
 
         # Output filename
-        ctk.CTkLabel(self.options_frame, text="Output File (-o):").grid(row=0, column=2, padx=(20, 10), pady=5,
-                                                                        sticky="w")
-        ctk.CTkEntry(self.options_frame, textvariable=self.output_file).grid(row=0, column=3, padx=0, pady=5,
-                                                                             sticky="ew")
+        ctk.CTkLabel(
+            self.options_frame,
+            text="Output File (-o):"
+        ).grid(
+            row=0,
+            column=2,
+            padx=(20, 10),
+            pady=5,
+            sticky="w"
+        )
+
+        ctk.CTkEntry(
+            self.options_frame,
+            textvariable=self.output_file
+        ).grid(
+            row=0,
+            column=3,
+            padx=0,
+            pady=5,
+            sticky="ew"
+        )
 
         # Control frame
         self.control_frame = ctk.CTkFrame(self)
         self.control_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="ew")
         self.control_frame.grid_columnconfigure((0, 1), weight=1)
-        self.clear_button = ctk.CTkButton(self.control_frame, text="Clear Output", command=self.clear_output)
+
+        self.clear_button = self.clear_button = ctk.CTkButton(
+            self.control_frame,
+            text="Clear Output",
+            command=self.clear_output
+        )
         self.clear_button.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
 
-        self.start_button = ctk.CTkButton(self.control_frame, text="Start Attack", command=self.start_hashcat_thread)
+        self.start_button = ctk.CTkButton(
+            self.control_frame,
+            text="Start Attack",
+            command=self.start_hashcat_thread
+        )
         self.start_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
 
-        self.stop_button = ctk.CTkButton(self.control_frame, text="Stop Attack", command=self.stop_hashcat,
-                                         state="disabled")
+        self.stop_button = ctk.CTkButton(
+            self.control_frame,
+            text="Stop Attack",
+            command=self.stop_hashcat,
+            state="disabled"
+        )
         self.stop_button.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
 
         # Output box
         self.output_text = ctk.CTkTextbox(self, state="disabled", wrap="word")
         self.output_text.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
 
-
-
-    def change_choice(self,mode):
+    def change_choice(self, mode):
         mode = self.dropdown.get()
         choice = self.hash_presets[mode]
         self.hash_mode.set(choice)
 
+    def change_color(self, choosen_color):
+        self.start_button.configure(fg_color=choosen_color)
+        self.stop_button.configure(fg_color=choosen_color)
+        self.dropdown.configure(fg_color=choosen_color)
+        self.toggle_optimized_kernel.configure(fg_color=choosen_color)
 
+        self.hashcat_browse_button.configure(fg_color=choosen_color)
+        self.hash_browse_button.configure(fg_color=choosen_color)
+        self.wordlist_browse_button.configure(fg_color=choosen_color)
 
-
-
-
-
+        self.color_dropdown.configure(fg_color=choosen_color)
+        self.clear_button.configure(fg_color=choosen_color)
+        self.toggle_force.configure(fg_color=choosen_color)
 
     # set modes
     def get_mode(self, *args):
         current_mode = self.hash_mode.get()
+
         if current_mode == "0":
             self.dropdown.set(self.reverse_hash_presets["0"])
+
         elif current_mode == "100":
-             self.dropdown.set(self.reverse_hash_presets["100"])
+            self.dropdown.set(self.reverse_hash_presets["100"])
 
         elif current_mode == "1400":
-             self.dropdown.set(self.reverse_hash_presets["1400"])
+            self.dropdown.set(self.reverse_hash_presets["1400"])
 
         elif current_mode == "1700":
-             self.dropdown.set(self.reverse_hash_presets["1700"])
+            self.dropdown.set(self.reverse_hash_presets["1700"])
+
         elif current_mode == "1000":
             self.dropdown.set(self.reverse_hash_presets["1000"])
-
-
 
     def clear_output(self):
         self.output_text.configure(state="normal")
         self.output_text.delete("1.0", tk.END)
         self.output_text.configure(state="disabled")
 
-
     def select_hashcat_dir(self):
         # Use askdirectory to select a folder
         path = filedialog.askdirectory(title="Select Hashcat Folder")
+
         if path:
             self.hashcat_dir.set(path)
 
     def select_hash_file(self):
         path = filedialog.askopenfilename(title="Select Hash File")
+
         if path:
             self.hash_file_path.set(path)
 
     def select_wordlist_file(self):
         path = filedialog.askopenfilename(title="Select Wordlist File")
+
         if path:
             self.wordlist_file_path.set(path)
 
@@ -215,15 +294,17 @@ class HashcatGUI(ctk.CTk):
 
         if not hashcat_dir or not os.path.isdir(hashcat_dir):
             self.log("ERROR: Please select a valid Hashcat directory.\n")
-            self.status_label.configure(text="Status: Error",text_color="red")
+            self.status_label.configure(text="Status: Error", text_color="red")
             return
+
         if not hash_file or not os.path.isfile(hash_file):
             self.log("ERROR: Please select a valid hash file.\n")
-            self.status_label.configure(text="Status: Error",text_color="red")
+            self.status_label.configure(text="Status: Error", text_color="red")
             return
+
         if not wordlist or not os.path.isfile(wordlist):
             self.log("ERROR: Please select a valid wordlist file.\n")
-            self.status_label.configure(text="Status: Error",text_color="red")
+            self.status_label.configure(text="Status: Error", text_color="red")
             return
 
         self.start_button.configure(state="disabled")
@@ -234,10 +315,14 @@ class HashcatGUI(ctk.CTk):
         self.output_text.delete("1.0", tk.END)
         self.output_text.configure(state="disabled")
 
-        self.hashcat_thread = threading.Thread(target=self.run_hashcat, daemon=True)
+        self.hashcat_thread = threading.Thread(
+            target=self.run_hashcat,
+            daemon=True
+        )
         self.hashcat_thread.start()
 
     def run_hashcat(self):
+
         # creates the hashcat command
         hashcat_dir = self.hashcat_dir.get()
         hash_file = self.hash_file_path.get()
@@ -245,35 +330,64 @@ class HashcatGUI(ctk.CTk):
         mode = self.hash_mode.get()
         output_filename = self.output_file.get()
 
-
         # Chooses the correct executable name for the right operating system
         if sys.platform == "win32":
             executable_name = "hashcat.exe"
+
         else:  # Linux, macOS, etc
             executable_name = "hashcat.bin"
 
-        executable_path = os.path.join(hashcat_dir, executable_name)
+        executable_path = os.path.join(
+            hashcat_dir,
+            executable_name
+        )
 
         if not os.path.exists(executable_path):
+
             # Fallback for systems where it might just be hashcat
-            if sys.platform != "win32" and os.path.exists(os.path.join(hashcat_dir, "hashcat")):
-                executable_path = os.path.join(hashcat_dir, "hashcat")
+            if sys.platform != "win32" and os.path.exists(
+                os.path.join(hashcat_dir, "hashcat")
+            ):
+                executable_path = os.path.join(
+                    hashcat_dir,
+                    "hashcat"
+                )
+
             else:
+                self.log(
+                    f"Error: Hashcat executable ('{executable_name}') "
+                    f"not found in '{hashcat_dir}'.\n"
+                )
 
-                self.log(f"Error: Hashcat executable ('{executable_name}') not found in '{hashcat_dir}'.\n")
-                self.status_label.configure(text="Status: Error",text_color="red")
+                self.status_label.configure(
+                    text="Status: Error",
+                    text_color="red"
+                )
+
                 self.process_finished()
-
                 return
 
         self.log(f"--- Starting Hashcat ---\n")
-        self.status_label.configure(text="Status: Running",text_color="orange")
-        self.log(f"Executable: {executable_path}\n")
-        self.log(f"Mode: {mode}, Hash File: {hash_file}, Wordlist: {wordlist}\n")
-        self.log(f"Results will be saved to: {os.path.join(hashcat_dir, output_filename)}\n\n")
 
+        self.status_label.configure(
+            text="Status: Running",
+            text_color="orange"
+        )
+
+        self.log(f"Executable: {executable_path}\n")
+
+        self.log(
+            f"Mode: {mode}, Hash File: {hash_file}, "
+            f"Wordlist: {wordlist}\n"
+        )
+
+        self.log(
+            f"Results will be saved to: "
+            f"{os.path.join(hashcat_dir, output_filename)}\n\n"
+        )
 
         try:
+
             cmd = [
                 executable_path,  # Use the full path to the executable
                 '-m', mode,
@@ -282,13 +396,10 @@ class HashcatGUI(ctk.CTk):
                 hash_file,
                 wordlist
             ]
-            selected_device = self.choose_device.get()
-            raw_device = self.device_type[selected_device]
-            cmd.extend(raw_device.split())
-
 
             if self.toggle_force.get():
                 cmd.append("--force")
+
             if self.toggle_optimized_kernel.get():
                 cmd.append("-O")
 
@@ -306,83 +417,166 @@ class HashcatGUI(ctk.CTk):
 
             # Read output line by line in real-time
             for line in iter(self.process.stdout.readline, ''):
-
                 self.log(line)
-
-
 
             self.process.stdout.close()
             return_code = self.process.wait()
+
             if return_code != 0:
-                self.log(f"\n--- Hashcat process exited with error code: {return_code} ---\n")
-                self.status_label.configure(text="Status: Error",text_color="red")
+                self.log(
+                    f"\n--- Hashcat process exited with error code: "
+                    f"{return_code} ---\n"
+                )
+
+                self.status_label.configure(
+                    text="Status: Error",
+                    text_color="red"
+                )
+
                 self.process_finished()
                 return
 
         # Error handling for a file not found error
         except FileNotFoundError:
-            self.log(f"ERROR: Could not find the hashcat executable at '{executable_path}'.\n"
 
-                     f"Please ensure the path is correct and the file has execute permissions.\n")
-            self.status_label.configure(text="Status: Error",text_color="red")
+            self.log(
+                f"ERROR: Could not find the hashcat executable at "
+                f"'{executable_path}'.\n"
+                f"Please ensure the path is correct and the file has "
+                f"execute permissions.\n"
+            )
+
+            self.status_label.configure(
+                text="Status: Error",
+                text_color="red"
+            )
+
             self.process_finished()
 
-
         except Exception as e:
-            self.log(f"An unexpected error occurred while trying to run hashcat: {e}\n")
-            self.status_label.configure(text="Status: Error",text_color="red")
+
+            self.log(
+                f"An unexpected error occurred while trying to run "
+                f"hashcat: {e}\n"
+            )
+
+            self.status_label.configure(
+                text="Status: Error",
+                text_color="red"
+            )
+
             self.process_finished()
             return
 
         self.log("\n--- Hashcat process finished ---\n")
-        self.status_label.configure(text="Status: Finished",text_color="green")
+
+        self.status_label.configure(
+            text="Status: Finished",
+            text_color="green"
+        )
+
         self.show_cracked_passwords()
         self.process_finished()
 
     def stop_hashcat(self):
+
         if self.process and self.process.poll() is None:
-            self.log("\n--- Terminating Hashcat process... ---\n")
+
+            self.log(
+                "\n--- Terminating Hashcat process... ---\n"
+            )
+
             self.process.terminate()  # A more forceful way to stop
 
             try:
+
                 # Terminates the process gracefully
                 self.process.wait(timeout=2)
+
             except subprocess.TimeoutExpired:
-                self.log("--- Process did not terminate, killing it. ---\n")
+
+                self.log(
+                    "--- Process did not terminate, killing it. ---\n"
+                )
+
                 self.process.kill()  # last resort
-            self.log("--- Hashcat process stopped by user ---\n")
-            self.status_label.configure(text="Status: Stopped",text_color= None)
+
+            self.log(
+                "--- Hashcat process stopped by user ---\n"
+            )
+
+            self.status_label.configure(
+                text="Status: Stopped",
+                text_color=None
+            )
+
         self.process_finished()
 
     def process_finished(self):
+
         self.start_button.configure(state="normal")
         self.stop_button.configure(state="disabled")
         self.process = None
 
     def show_cracked_passwords(self):
 
-        output_path = os.path.join(self.hashcat_dir.get(), self.output_file.get())
+        output_path = os.path.join(
+            self.hashcat_dir.get(),
+            self.output_file.get()
+        )
 
-        self.log(f"\n--- Checking for results in {output_path} ---\n")
+        self.log(
+            f"\n--- Checking for results in {output_path} ---\n"
+        )
+
         try:
-            if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
-                with open(output_path, 'r', encoding='utf-8') as f:
+
+            if (
+                os.path.exists(output_path)
+                and os.path.getsize(output_path) > 0
+            ):
+
+                with open(
+                    output_path,
+                    'r',
+                    encoding='utf-8'
+                ) as f:
                     cracked = f.read()
+
                 self.log("Cracked Passwords Found:\n")
                 self.log("------------------------\n")
                 self.log(cracked)
                 self.log("------------------------\n")
+
             else:
-                self.log("No passwords were cracked or the output file is empty.\n")
+
+                self.log(
+                    "No passwords were cracked or the output file "
+                    "is empty.\n"
+                )
+
         except Exception as e:
-            self.log(f"Could not read the output file: {e}\n")
+
+            self.log(
+                f"Could not read the output file: {e}\n"
+            )
 
 
 if __name__ == "__main__":
+
     try:
         app = HashcatGUI()
         app.mainloop()
+
     except Exception as e:
-        logging.error("An error has occurred while running the app", exc_info=True)
+        logging.error(
+            "An error has occurred while running the app",
+            exc_info=True
+        )
+
 else:
-    logging.info("HashcatGUI app did not start because this script was imported, not run directly.")
+
+    logging.info(
+        "HashcatGUI app did not start because this script was imported, "
+        "not run directly."
+    )
