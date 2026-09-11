@@ -22,7 +22,7 @@ class HashcatGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Hashcat GUI v1.3.1")
+        self.title("Hashcat GUI v1.4.0")
         self.geometry("800x650")  # Increased height for new fields
 
         self.process = None
@@ -81,6 +81,11 @@ class HashcatGUI(ctk.CTk):
             "SHA512": "1700",
             "NTLM": "1000"
         }
+        self.appearance_modes = {
+            "System": "System",
+            "Dark": "Dark",
+            "Light": "Light"
+        }
 
         # reverse hash presets
         self.reverse_hash_presets = {
@@ -114,6 +119,12 @@ class HashcatGUI(ctk.CTk):
             values=list(self.color.keys()),
             command=self.change_color
         )
+        self.system_color_dropdown = ctk.CTkOptionMenu(
+            self.options_frame,
+            values = list(self.appearance_modes.keys()),
+            command=self.system_color
+        )
+        self.system_color_dropdown.grid(row=1,column=3 ,padx=10, pady=5, sticky="w")
 
         self.color_dropdown.grid(row=1, column=2, padx=10, pady=5, sticky="w")
 
@@ -237,6 +248,10 @@ class HashcatGUI(ctk.CTk):
         self.clear_button.configure(fg_color=choosen_color)
         self.toggle_force.configure(fg_color=choosen_color)
 
+        self.system_color_dropdown.configure(fg_color=choosen_color, button_color=choosen_color, button_hover_color=choosen_color)
+
+
+
         if choosen_color == "Blue":
 
             # default blue color
@@ -247,11 +262,7 @@ class HashcatGUI(ctk.CTk):
             self.start_button.configure(fg_color=default_fg)
             self.stop_button.configure(fg_color=default_fg)
 
-            self.dropdown.configure(
-                fg_color=default_fg,
-                button_color=default_button,
-                button_hover_color=default_hover
-            )
+            self.dropdown.configure(fg_color=default_fg, button_color=default_button, button_hover_color=default_hover)
 
             self.toggle_optimized_kernel.configure(fg_color=default_fg)
 
@@ -259,14 +270,11 @@ class HashcatGUI(ctk.CTk):
             self.hash_browse_button.configure(fg_color=default_fg)
             self.wordlist_browse_button.configure(fg_color=default_fg)
 
-            self.color_dropdown.configure(
-                fg_color=default_fg,
-                button_color=default_button,
-                button_hover_color=default_hover
-            )
+            self.color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
             self.clear_button.configure(fg_color=default_fg)
             self.toggle_force.configure(fg_color=default_fg)
+            self.system_color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
     # set modes
     def get_mode(self, *args):
@@ -298,6 +306,11 @@ class HashcatGUI(ctk.CTk):
 
         if path:
             self.hashcat_dir.set(path)
+
+    def system_color(self, choosen_system_color):
+        choosen_system_color = self.system_color_dropdown.get()
+        ctk.set_appearance_mode(choosen_system_color)
+
 
     def select_hash_file(self):
         path = filedialog.askopenfilename(title="Select Hash File")
