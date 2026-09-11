@@ -235,6 +235,37 @@ class HashcatGUI(ctk.CTk):
         self.clear_button.configure(fg_color=choosen_color)
         self.toggle_force.configure(fg_color=choosen_color)
 
+        if choosen_color == "Blue":
+
+            # default blue color
+            default_fg = ("#3B8ED0", "#1F6AA5")
+            default_button = ("#36719F", "#144870")
+            default_hover = ("#27577D", "#203A4F")
+
+            self.start_button.configure(fg_color=default_fg)
+            self.stop_button.configure(fg_color=default_fg)
+
+            self.dropdown.configure(
+                fg_color=default_fg,
+                button_color=default_button,
+                button_hover_color=default_hover
+            )
+
+            self.toggle_optimized_kernel.configure(fg_color=default_fg)
+
+            self.hashcat_browse_button.configure(fg_color=default_fg)
+            self.hash_browse_button.configure(fg_color=default_fg)
+            self.wordlist_browse_button.configure(fg_color=default_fg)
+
+            self.color_dropdown.configure(
+                fg_color=default_fg,
+                button_color=default_button,
+                button_hover_color=default_hover
+            )
+
+            self.clear_button.configure(fg_color=default_fg)
+            self.toggle_force.configure(fg_color=default_fg)
+
     # set modes
     def get_mode(self, *args):
         current_mode = self.hash_mode.get()
