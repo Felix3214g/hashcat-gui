@@ -8,8 +8,8 @@ A cross-platform graphical interface for Hashcat built with Python and CustomTki
 Hashcat GUI provides a cleaner way to use common Hashcat features without having to remember command-line syntax.
 
 ## Hashcat GUI v1.4.0
+<img width="990" height="847" alt="image" src="https://github.com/user-attachments/assets/b746a305-63ce-47dd-a5ca-d9cc2951cd9b" />
 
-![Hashcat GUI v1.4.0](assets/screenshots/hashcatgui-v1.4.0.png)
 
 ### What's New in v1.4.0
 
