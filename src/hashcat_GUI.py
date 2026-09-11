@@ -22,7 +22,7 @@ class HashcatGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Hashcat GUI")
+        self.title("Hashcat GUI v1.3.1")
         self.geometry("800x650")  # Increased height for new fields
 
         self.process = None
@@ -97,13 +97,15 @@ class HashcatGUI(ctk.CTk):
             values=list(self.hash_presets.keys()),
             command=self.change_choice
         )
-
+        # color options
         self.color = {
             "Blue": "#1F6AA5",
             "Purple": "#7C3AED",
             "Red": "#DC2626",
             "Green": "#16A34A",
-            "Orange": "#EA580C"
+            "Orange": "#EA580C",
+            "Teal": "#0F766E",
+
         }
 
         # color change dropdown
