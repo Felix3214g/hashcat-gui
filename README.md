@@ -147,5 +147,4 @@ Use Hashcat GUI only with hashes and systems that you own or have explicit permi
 
 MIT License.
 
-```
-```
+
