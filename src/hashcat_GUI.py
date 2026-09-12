@@ -22,7 +22,7 @@ class HashcatGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Hashcat GUI v1.4.0")
+        self.title("Hashcat GUI v1.4.1")
         self.geometry("800x650")  # Increased height for new fields
 
         self.process = None
@@ -265,7 +265,7 @@ class HashcatGUI(ctk.CTk):
 
             self.dropdown.configure(fg_color=default_fg, button_color=default_button, button_hover_color=default_hover)
 
-            self.toggle_optimized_kernel.configure(fg_color=default_fg)
+            self.toggle_optimized_kernel.configure(progress_color=default_fg)
 
             self.hashcat_browse_button.configure(fg_color=default_fg)
             self.hash_browse_button.configure(fg_color=default_fg)
@@ -274,7 +274,7 @@ class HashcatGUI(ctk.CTk):
             self.color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
             self.clear_button.configure(fg_color=default_fg)
-            self.toggle_force.configure(fg_color=default_fg)
+            self.toggle_force.configure(progress_color=default_fg)
             self.system_color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
     # set modes
