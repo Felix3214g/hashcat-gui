@@ -235,17 +235,17 @@ class HashcatGUI(ctk.CTk):
         self.hash_mode.set(choice)
 
     def change_color(self, choosen_color):
-        self.start_button.configure(fg_color=choosen_color)
-        self.stop_button.configure(fg_color=choosen_color)
+        self.start_button.configure(fg_color=choosen_color, hover_color=choosen_color)
+        self.stop_button.configure(fg_color=choosen_color, hover_color=choosen_color)
         self.dropdown.configure(fg_color=choosen_color,button_color=choosen_color,button_hover_color=choosen_color)
         self.toggle_optimized_kernel.configure(progress_color=choosen_color)
 
-        self.hashcat_browse_button.configure(fg_color=choosen_color)
-        self.hash_browse_button.configure(fg_color=choosen_color)
-        self.wordlist_browse_button.configure(fg_color=choosen_color)
+        self.hashcat_browse_button.configure(fg_color=choosen_color, hover_color=choosen_color)
+        self.hash_browse_button.configure(fg_color=choosen_color, hover_color=choosen_color)
+        self.wordlist_browse_button.configure(fg_color=choosen_color, hover_color=choosen_color)
 
         self.color_dropdown.configure(fg_color=choosen_color, button_color=choosen_color, button_hover_color=choosen_color)
-        self.clear_button.configure(fg_color=choosen_color)
+        self.clear_button.configure(fg_color=choosen_color, hover_color=choosen_color)
         self.toggle_force.configure(progress_color=choosen_color)
 
 
@@ -260,20 +260,20 @@ class HashcatGUI(ctk.CTk):
             default_button = ("#36719F", "#144870")
             default_hover = ("#27577D", "#203A4F")
 
-            self.start_button.configure(fg_color=default_fg)
-            self.stop_button.configure(fg_color=default_fg)
+            self.start_button.configure(fg_color=default_fg, hover_color=default_hover)
+            self.stop_button.configure(fg_color=default_fg, hover_color=default_hover)
 
             self.dropdown.configure(fg_color=default_fg, button_color=default_button, button_hover_color=default_hover)
 
             self.toggle_optimized_kernel.configure(progress_color=default_fg)
 
-            self.hashcat_browse_button.configure(fg_color=default_fg)
-            self.hash_browse_button.configure(fg_color=default_fg)
-            self.wordlist_browse_button.configure(fg_color=default_fg)
+            self.hash_browse_button.configure(fg_color=default_fg, hover_color=default_hover)
+            self.hashcat_browse_button.configure(fg_color=default_fg, hover_color=default_hover)
+            self.wordlist_browse_button.configure(fg_color=default_fg, hover_color=default_hover)
 
             self.color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
-            self.clear_button.configure(fg_color=default_fg)
+            self.clear_button.configure(fg_color=default_fg, hover_color=default_hover)
             self.toggle_force.configure(progress_color=default_fg)
             self.system_color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
 
