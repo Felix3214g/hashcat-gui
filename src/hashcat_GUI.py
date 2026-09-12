@@ -238,7 +238,7 @@ class HashcatGUI(ctk.CTk):
         self.start_button.configure(fg_color=choosen_color)
         self.stop_button.configure(fg_color=choosen_color)
         self.dropdown.configure(fg_color=choosen_color,button_color=choosen_color,button_hover_color=choosen_color)
-        self.toggle_optimized_kernel.configure(fg_color=choosen_color)
+        self.toggle_optimized_kernel.configure(progress_color=choosen_color)
 
         self.hashcat_browse_button.configure(fg_color=choosen_color)
         self.hash_browse_button.configure(fg_color=choosen_color)
@@ -246,7 +246,8 @@ class HashcatGUI(ctk.CTk):
 
         self.color_dropdown.configure(fg_color=choosen_color, button_color=choosen_color, button_hover_color=choosen_color)
         self.clear_button.configure(fg_color=choosen_color)
-        self.toggle_force.configure(fg_color=choosen_color)
+        self.toggle_force.configure(progress_color=choosen_color)
+
 
         self.system_color_dropdown.configure(fg_color=choosen_color, button_color=choosen_color, button_hover_color=choosen_color)
 
