@@ -1,68 +1,150 @@
+
+
+
 # Hashcat GUI
 
-## V1.1
+A cross-platform graphical interface for Hashcat built with Python and CustomTkinter.
 
-<img src="https://github.com/user-attachments/assets/00047a06-b102-4b90-b7af-bee12925277a" width="800" alt="Hashcat GUI V1.1">
+Hashcat GUI provides a cleaner way to use common Hashcat features without having to remember command-line syntax.
+
+## Hashcat GUI v1.4.0
+<img width="990" height="847" alt="image" src="https://github.com/user-attachments/assets/b746a305-63ce-47dd-a5ca-d9cc2951cd9b" />
 
 
-## What's New in V1.2
+### What's New in v1.4.0
 
-<img src="https://github.com/user-attachments/assets/a397b30e-a976-4d58-be6f-126ac41045b4" width="800" alt="Hashcat GUI V1.2">
+- Added Light, Dark, and System appearance modes
+- Added a new appearance selector
+- Added customizable color themes
+- Improved theme consistency across buttons, switches, and dropdowns
+- Added Teal theme
+- Fixed default Blue theme restoration
+- Improved dropdown appearance and arrow colors
+- Added version number to the application title
+- Added Windows installer support
+- Added macOS Apple Silicon DMG support
 
-- Added hash mode dropdown with common presets
-- Added automatic synchronization between dropdown and manual mode input
-- Added reverse hash mode mapping
-- Added live hash mode updates while typing
-- Improved hash mode selection workflow
+## Features
 
-> **Note:** Windows (.exe) and macOS (.dmg) installer releases are coming soon.
-
-A graphical interface for Hashcat that removes the complexity of command-line password recovery operations.
-
-## Overview
-
-This application provides a streamlined approach to using Hashcat through an intuitive GUI. Built for security professionals who need efficient hash cracking without memorizing syntax.
-
-## Key Features
-
-- Clean interface using tkinter and customtkinter frameworks
-- File browser integration for hash files and wordlists
-- Hash mode dropdown with automatic synchronization
-- Process management with start/stop controls
-- Automatic logging and result capture
+- Clean CustomTkinter interface
+- Windows and macOS support
+- Light, Dark, and System appearance modes
+- Multiple selectable color themes
+- Hash file browser
+- Wordlist browser
+- Hashcat folder selection
+- Common hash mode presets
 - Manual hash mode configuration
+- Automatic synchronization between presets and manual mode input
+- Force mode support
+- Optimized kernel support
+- Start and stop attack controls
+- Live Hashcat output
+- Automatic result saving
+- Configurable output file
 
-## Setup
+## Download
+
+Prebuilt installers are available from the GitHub Releases page.
+
+### Windows
+
+Download:
+
+`HashcatGUI-v1.4.0-windows-x64-setup.exe`
+
+The Windows installer includes the application and can create Start Menu and desktop shortcuts.
+
+### macOS
+
+For Apple Silicon Macs, download:
+
+`HashcatGUI-v1.4.0-macos-arm64.dmg`
+
+> The current builds are not digitally signed or notarized, so Windows SmartScreen or macOS Gatekeeper may display a warning.
+
+## Running From Source
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/Felix3214g/hashcat-gui.git
 cd hashcat-gui
-```
+````
 
-Install dependencies:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Ensure Hashcat is installed and available in your system PATH. Download it from **https://hashcat.net**.
-
-## Operation
-
-Launch the application:
+Run the application:
 
 ```bash
 python src/hashcat_GUI.py
 ```
 
-Select your hash file and wordlist using the browse buttons. Choose a hash mode from the dropdown or manually enter a Hashcat mode number (e.g. `0` for MD5). Click **Start Attack** to begin processing. Use **Stop Attack** to terminate the attack if needed. Results are automatically saved to `cracked_passwords.txt`.
+Hashcat must also be installed on your system.
+
+You can download Hashcat from:
+
+[https://hashcat.net/hashcat/](https://hashcat.net/hashcat/)
+
+## Usage
+
+1. Select your Hashcat folder.
+2. Select a hash file.
+3. Select a wordlist.
+4. Choose a hash mode from the preset dropdown or enter one manually.
+5. Configure optional settings such as Force or Optimized Kernel.
+6. Choose your preferred color theme and appearance mode.
+7. Click **Start Attack**.
+8. Results are written to the selected output file.
+
+The default output file is:
+
+```text
+cracked_passwords.txt
+```
+
+Use **Stop Attack** to terminate a running Hashcat process.
+
+## Supported Hash Presets
+
+The GUI currently includes common presets such as:
+
+* MD5
+* SHA1
+* SHA256
+* SHA512
+* NTLM
+
+Other Hashcat modes can be entered manually.
+
+## Project Structure
+
+```text
+hashcat-gui/
+├── src/
+│   └── hashcat_GUI.py
+├── installer/
+├── requirements.txt
+├── build.py
+└── README.md
+```
 
 ## Development
 
-Contributions are welcome through pull requests. Report bugs or request features via the GitHub issue tracker.
+The project is actively being improved.
+
+Bug reports, feature requests, and contributions are welcome through GitHub Issues and Pull Requests.
+
+## Disclaimer
+
+Use Hashcat GUI only with hashes and systems that you own or have explicit permission to test.
 
 ## License
 
-MIT License – see the `LICENSE` file for details.
+MIT License.
+
+
