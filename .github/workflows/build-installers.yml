@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - installer-build-v1.4.0
+      - installer-v1.4.1-icon
   workflow_dispatch:
 
 jobs:
@@ -25,11 +26,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pillow
+
+      - name: Create Windows icon
+        shell: powershell
+        run: |
+          python -c "from PIL import Image; Image.open('assets/hashcatgui-icon.png').convert('RGBA').save('assets/hashcatgui-icon.ico', sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])"
 
       - name: Build application
         shell: powershell
         run: |
-          pyinstaller --noconfirm --clean --onefile --windowed --name HashcatGUI src/hashcat_GUI.py
+          pyinstaller --noconfirm --clean --onefile --windowed --name HashcatGUI --icon assets/hashcatgui-icon.ico src/hashcat_GUI.py
 
       - name: Install Inno Setup
         shell: powershell
@@ -42,8 +49,8 @@ jobs:
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
-          name: HashcatGUI-v1.4.0-windows-x64-setup
-          path: installer-output/HashcatGUI-v1.4.0-windows-x64-setup.exe
+          name: HashcatGUI-v1.4.1-windows-x64-setup
+          path: installer-output/HashcatGUI-v1.4.1-windows-x64-setup.exe
           if-no-files-found: error
 
   macos-arm64:
@@ -69,6 +76,6 @@ jobs:
       - name: Upload macOS DMG
         uses: actions/upload-artifact@v4
         with:
-          name: HashcatGUI-v1.4.0-macos-arm64
-          path: installer-output/HashcatGUI-v1.4.0-macos-arm64.dmg
+          name: HashcatGUI-v1.4.1-macos-arm64
+          path: installer-output/HashcatGUI-v1.4.1-macos-arm64.dmg
           if-no-files-found: error

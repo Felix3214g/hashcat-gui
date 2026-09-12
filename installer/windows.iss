@@ -1,5 +1,5 @@
 #define MyAppName "Hashcat GUI"
-#define MyAppVersion "1.4.0"
+#define MyAppVersion "1.4.1"
 #define MyAppPublisher "Felix3214g"
 #define MyAppExeName "HashcatGUI.exe"
 
@@ -12,13 +12,15 @@ DefaultDirName={autopf}\Hashcat GUI
 DefaultGroupName={#MyAppName}
 UninstallDisplayName={#MyAppName}
 OutputDir=..\installer-output
-OutputBaseFilename=HashcatGUI-v1.4.0-windows-x64-setup
+OutputBaseFilename=HashcatGUI-v1.4.1-windows-x64-setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
+SetupIconFile=..\assets\hashcatgui-icon.ico
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Files]
 Source: "..\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
