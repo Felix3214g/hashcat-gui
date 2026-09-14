@@ -1,5 +1,4 @@
 import tkinter as tk
-from idlelib.configdialog import changes
 from tkinter import filedialog, OptionMenu
 import customtkinter as ctk
 import subprocess
