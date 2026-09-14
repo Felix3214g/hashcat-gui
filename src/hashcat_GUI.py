@@ -263,7 +263,7 @@ class HashcatGUI(ctk.CTk):
             self.start_button.configure(fg_color=default_fg, hover_color=default_hover)
             self.stop_button.configure(fg_color=default_fg, hover_color=default_hover)
 
-            self.dropdown.configure(fg_color=default_fg, button_color=default_button, button_hover_color=default_hover)
+            self.dropdown.configure(fg_color=default_fg, button_color=default_fg, button_hover_color=default_hover)
 
             self.toggle_optimized_kernel.configure(progress_color=default_fg)
 
@@ -271,11 +271,11 @@ class HashcatGUI(ctk.CTk):
             self.hashcat_browse_button.configure(fg_color=default_fg, hover_color=default_hover)
             self.wordlist_browse_button.configure(fg_color=default_fg, hover_color=default_hover)
 
-            self.color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
+            self.color_dropdown.configure(fg_color=default_fg, button_color=default_fg,button_hover_color=default_hover)
 
             self.clear_button.configure(fg_color=default_fg, hover_color=default_hover)
             self.toggle_force.configure(progress_color=default_fg)
-            self.system_color_dropdown.configure(fg_color=default_fg, button_color=default_button,button_hover_color=default_hover)
+            self.system_color_dropdown.configure(fg_color=default_fg, button_color=default_fg,button_hover_color=default_hover)
 
     # set modes
     def get_mode(self, *args):
